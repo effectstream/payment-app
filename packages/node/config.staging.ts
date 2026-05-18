@@ -105,7 +105,7 @@ export const config = new ConfigBuilder()
       .addParallel(
         (networks) => networks.evmMain,
         (network, _deployments) => ({
-          name: "mainEvmRPC",
+          name: "payment-l2",
           type: ConfigSyncProtocolType.EVM_RPC_PARALLEL,
           chainUri: network.rpcUrls.default.http[0],
           startBlockHeight: EVM_START_BLOCK,
