@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#64748b" stop-opacity="0.4" />
+      <stop offset="100%" stop-color="#0d1118" stop-opacity="1" />
+    </linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.5" r="0.55">
+      <stop offset="0%" stop-color="#f59e0b" stop-opacity="0.45" />
+      <stop offset="100%" stop-color="#f59e0b" stop-opacity="0" />
+    </radialGradient>
+  </defs>
+  <rect width="200" height="200" rx="14" fill="url(#bg)" />
+  <rect width="200" height="200" rx="14" fill="url(#glow)" />
+  <g>
+    <animateTransform attributeName="transform" attributeType="XML" type="translate"
+      values="0 -6; 0 6; 0 -6" keyTimes="0;0.5;1"
+      calcMode="spline" keySplines="0.45 0 0.55 1; 0.45 0 0.55 1"
+      dur="3.09s" begin="-0.79s" repeatCount="indefinite" />
+    <g transform="rotate(-18 100 100)">
+    <circle cx="42" cy="116" r="7" fill="#cbd5e1" />
+    <rect x="48" y="110" width="20" height="14" rx="2" fill="#cbd5e1" />
+    <path d="M 66 108 Q 64 124 72 124 L 80 124 Q 72 110 72 108 Z" fill="#64748b" />
+    <path d="M 70 108 C 110 85 145 68 175 52 L 178 60 C 150 78 110 100 76 118 Z" fill="#64748b" />
+    <path d="M 75 110 C 110 88 145 72 173 58 L 174 62 C 145 78 110 96 80 116 Z" fill="#f59e0b" opacity="0.55" />
+    </g>
+  </g>
+</svg>

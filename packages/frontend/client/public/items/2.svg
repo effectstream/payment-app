@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#f97316" stop-opacity="0.4" />
+      <stop offset="100%" stop-color="#3a1a0a" stop-opacity="1" />
+    </linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.5" r="0.55">
+      <stop offset="0%" stop-color="#fb923c" stop-opacity="0.45" />
+      <stop offset="100%" stop-color="#fb923c" stop-opacity="0" />
+    </radialGradient>
+  </defs>
+  <rect width="200" height="200" rx="14" fill="url(#bg)" />
+  <rect width="200" height="200" rx="14" fill="url(#glow)" />
+  <g>
+    <animateTransform attributeName="transform" attributeType="XML" type="translate"
+      values="0 -6; 0 6; 0 -6" keyTimes="0;0.5;1"
+      calcMode="spline" keySplines="0.45 0 0.55 1; 0.45 0 0.55 1"
+      dur="2.94s" begin="-0.82s" repeatCount="indefinite" />
+    <g transform="rotate(-18 100 100)">
+    <rect x="55" y="94" width="58" height="22" rx="3" fill="#f97316" />
+    <rect x="64" y="116" width="20" height="28" rx="3" fill="#f97316" />
+    <polygon points="113,90 158,72 152,86 113,100" fill="#f97316" />
+    <polygon points="113,116 158,134 152,120 113,108" fill="#f97316" />
+    <polyline points="120,103 135,98 130,108 145,103" fill="none" stroke="#fb923c" stroke-width="3" stroke-linecap="round" />
+    <circle cx="80" cy="105" r="4" fill="#fb923c" />
+    </g>
+  </g>
+</svg>

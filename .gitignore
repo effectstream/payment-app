@@ -1,0 +1,25 @@
+node_modules
+.bun
+*.log
+.DS_Store
+.env
+.env.local
+.env.development
+.env.staging
+.orchestrator-logs
+batcher-data
+
+# Generated EVM artifacts
+packages/contracts-evm/build
+packages/contracts-evm/cache
+packages/contracts-evm/artifacts
+packages/contracts-evm/ignition/deployments
+packages/contracts-evm/mod.ts
+
+# Frontend build
+packages/frontend/client/dist
+packages/frontend/public/items
+
+# Tests
+packages/tests/playwright-report
+packages/tests/test-results

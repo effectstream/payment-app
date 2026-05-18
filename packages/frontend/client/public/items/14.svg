@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#14b8a6" stop-opacity="0.4" />
+      <stop offset="100%" stop-color="#0a2a2a" stop-opacity="1" />
+    </linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.5" r="0.55">
+      <stop offset="0%" stop-color="#2dd4bf" stop-opacity="0.45" />
+      <stop offset="100%" stop-color="#2dd4bf" stop-opacity="0" />
+    </radialGradient>
+  </defs>
+  <rect width="200" height="200" rx="14" fill="url(#bg)" />
+  <rect width="200" height="200" rx="14" fill="url(#glow)" />
+  <g>
+    <animateTransform attributeName="transform" attributeType="XML" type="translate"
+      values="0 -6; 0 6; 0 -6" keyTimes="0;0.5;1"
+      calcMode="spline" keySplines="0.45 0 0.55 1; 0.45 0 0.55 1"
+      dur="3.78s" begin="-1.96s" repeatCount="indefinite" />
+    <g transform="rotate(-18 100 100)">
+    <rect x="35" y="102" width="130" height="6" rx="2" fill="#99f6e4" />
+    <path d="M 50 105 Q 60 88 70 105 Q 80 122 90 105 Q 100 88 110 105 Q 120 122 130 105 Q 140 88 150 105"
+          fill="none" stroke="#14b8a6" stroke-width="6" stroke-linecap="round" />
+    <path d="M 50 105 Q 60 88 70 105 Q 80 122 90 105 Q 100 88 110 105 Q 120 122 130 105 Q 140 88 150 105"
+          fill="none" stroke="#2dd4bf" stroke-width="2" stroke-linecap="round" opacity="0.85" />
+    <circle cx="168" cy="105" r="9" fill="#2dd4bf" />
+    <circle cx="168" cy="105" r="4" fill="#99f6e4" />
+    </g>
+  </g>
+</svg>

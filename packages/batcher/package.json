@@ -1,0 +1,16 @@
+{
+  "name": "@payment-app/batcher",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "bun run batcher.dev.ts",
+    "start:mainnet": "bun run batcher.mainnet.ts"
+  },
+  "dependencies": {
+    "@effectstream/batcher-sdk": "0.100.13",
+    "@effectstream/utils": "0.100.13",
+    "effection": "^3.5.0",
+    "viem": "2.37.3"
+  }
+}

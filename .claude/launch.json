@@ -1,0 +1,17 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "frontend",
+      "runtimeExecutable": "sh",
+      "runtimeArgs": ["-c", "cd packages/frontend && bun run dev"],
+      "port": 10598
+    },
+    {
+      "name": "frontend-staging",
+      "runtimeExecutable": "sh",
+      "runtimeArgs": ["-c", "cd packages/frontend && bun run dev:staging"],
+      "port": 10598
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "name": "payment-app",
+  "private": true,
+  "workspaces": ["packages/*"],
+  "scripts": {
+    "dev": "NODE_ENV=development bunx orchestrator start",
+    "dev:staging": "NODE_ENV=staging bunx orchestrator start --config start.staging.ts",
+    "start:mainnet": "bun run packages/node/main.mainnet.ts",
+    "test": "bun run packages/tests/run-tests.ts",
+    "build:evm": "bun run --filter @payment-app/contracts-evm build:mod",
+    "build:pgtypes": "bun run --filter @payment-app/database pgtyped:update",
+    "build:frontend": "bun run --filter @payment-app/frontend build"
+  },
+  "dependencies": {
+    "@electric-sql/pglite": "^0.3.14",
+    "@effectstream/orchestrator": "0.100.13",
+    "wait-on": "8.0.3"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "typescript": "^5.6.0"
+  },
+  "effectstream": {
+    "default": "start.dev.ts"
+  }
+}

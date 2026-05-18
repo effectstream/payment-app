@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#d946ef" stop-opacity="0.4" />
+      <stop offset="100%" stop-color="#2a0d33" stop-opacity="1" />
+    </linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.5" r="0.55">
+      <stop offset="0%" stop-color="#e879f9" stop-opacity="0.45" />
+      <stop offset="100%" stop-color="#e879f9" stop-opacity="0" />
+    </radialGradient>
+  </defs>
+  <rect width="200" height="200" rx="14" fill="url(#bg)" />
+  <rect width="200" height="200" rx="14" fill="url(#glow)" />
+  <g>
+    <animateTransform attributeName="transform" attributeType="XML" type="translate"
+      values="0 -6; 0 6; 0 -6" keyTimes="0;0.5;1"
+      calcMode="spline" keySplines="0.45 0 0.55 1; 0.45 0 0.55 1"
+      dur="2.75s" begin="-0.65s" repeatCount="indefinite" />
+    <g transform="rotate(-18 100 100)">
+    <path d="M 70 42 Q 168 105 70 158" fill="none" stroke="#d946ef" stroke-width="9" stroke-linecap="round" />
+    <path d="M 70 42 Q 158 105 70 158" fill="none" stroke="#f5d0fe" stroke-width="3" stroke-linecap="round" opacity="0.7" />
+    <line x1="70" y1="42" x2="70" y2="158" stroke="#e879f9" stroke-width="2" />
+    <rect x="62" y="92" width="16" height="24" rx="2" fill="#2a0d33" opacity="0.75" />
+    <circle cx="70" cy="100" r="4" fill="#e879f9" />
+    </g>
+  </g>
+</svg>

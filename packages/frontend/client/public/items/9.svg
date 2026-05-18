@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#3b82f6" stop-opacity="0.4" />
+      <stop offset="100%" stop-color="#0d1d3d" stop-opacity="1" />
+    </linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.5" r="0.55">
+      <stop offset="0%" stop-color="#60a5fa" stop-opacity="0.45" />
+      <stop offset="100%" stop-color="#60a5fa" stop-opacity="0" />
+    </radialGradient>
+  </defs>
+  <rect width="200" height="200" rx="14" fill="url(#bg)" />
+  <rect width="200" height="200" rx="14" fill="url(#glow)" />
+  <g>
+    <animateTransform attributeName="transform" attributeType="XML" type="translate"
+      values="0 -6; 0 6; 0 -6" keyTimes="0;0.5;1"
+      calcMode="spline" keySplines="0.45 0 0.55 1; 0.45 0 0.55 1"
+      dur="2.93s" begin="-0.76s" repeatCount="indefinite" />
+    <g transform="rotate(-18 100 100)">
+    <circle cx="42" cy="104" r="8" fill="#bfdbfe" />
+    <rect x="50" y="98" width="22" height="12" rx="2" fill="#bfdbfe" />
+    <rect x="68" y="84" width="10" height="40" rx="2" fill="#3b82f6" />
+    <polygon points="78,96 168,96 180,104 168,112 78,112" fill="#3b82f6" />
+    <line x1="82" y1="104" x2="170" y2="104" stroke="#60a5fa" stroke-width="2" />
+    </g>
+  </g>
+</svg>

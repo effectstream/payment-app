@@ -1,0 +1,42 @@
+{
+  "name": "@payment-app/contracts-evm",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": "./mod.ts",
+  "scripts": {
+    "swap:remappings:forge": "bun ./node_modules/@effectstream/evm-hardhat/src/remappings/remappings-forge.ts --depth=0",
+    "swap:remappings:hardhat": "bun ./node_modules/@effectstream/evm-hardhat/src/remappings/remappings-hardhat.ts --depth=0",
+    "build:mod": "(bun run deploy:standalone || true) && bun -e 'await import(\"@effectstream/evm-hardhat/builder\")'",
+    "build:clean": "rm -rf build || true",
+    "build:forge": "bun run swap:remappings:forge && forge build",
+    "build:hardhat": "bun run swap:remappings:hardhat && bun ./node_modules/.bin/hardhat compile",
+    "build": "bun run build:forge && bun run build:hardhat",
+    "deploy:clean": "rm -rf ignition/deployments/chain-31337 || true",
+    "deploy:standalone": "bun run build && (((bun run chain:start) &) && (bun run chain:wait) && (bun run deploy) && bun run chain:stop) || true",
+    "deploy": "bun run deploy:clean && bun deploy.ts",
+    "chain:start": "bun ./node_modules/.bin/hardhat node",
+    "chain:stop": "kill -9 $(lsof -ti tcp:8545) || true",
+    "chain:wait": "bun ./node_modules/.bin/hardhat node wait"
+  },
+  "dependencies": {
+    "@effectstream/evm-hardhat": "0.100.13",
+    "@effectstream/evm-contracts": "0.100.13",
+    "@effectstream/log": "0.100.13",
+    "@effectstream/utils": "0.100.13",
+    "@nomicfoundation/ignition-core": "3.0.2",
+    "@nomicfoundation/hardhat-ignition": "3.0.2",
+    "@nomicfoundation/hardhat-ignition-viem": "3.0.2",
+    "@nomicfoundation/hardhat-viem": "3.0.0",
+    "@nomicfoundation/hardhat-errors": "3.0.1",
+    "@nomicfoundation/hardhat-utils": "3.0.0",
+    "@openzeppelin/contracts": "5.1.0",
+    "@openzeppelin/contracts-upgradeable": "^5.1.0",
+    "viem": "2.37.3",
+    "ws": "8.18.1"
+  },
+  "devDependencies": {
+    "hardhat": "3.0.4",
+    "wait-on": "8.0.3"
+  }
+}

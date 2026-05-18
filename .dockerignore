@@ -1,0 +1,27 @@
+node_modules
+.orchestrator-logs
+batcher-data
+*.log
+CLAUDE.md
+.git
+.gitignore
+.env
+.env.local
+
+# EVM build artifacts (regenerated inside the image)
+packages/contracts-evm/build
+packages/contracts-evm/cache
+packages/contracts-evm/artifacts
+packages/contracts-evm/ignition/deployments
+packages/contracts-evm/mod.ts
+
+# Frontend build artifacts
+packages/frontend/client/dist
+packages/frontend/public/items
+
+# Test artifacts
+packages/tests/playwright-report
+packages/tests/test-results
+
+# Local plans / claude
+.claude
