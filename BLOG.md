@@ -1,24 +1,24 @@
 # Inside payment-app: How This Effectstream App Is Wired
 
-`payment-app` is a small but complete example of an Effectstream application: a fiat-or-crypto in-game item store backed by an on-chain contract and an off-chain indexer.  This post walks through the specific implementation: what the contract does (and pointedly doesn't do), what shape the grammar takes, what the state machine actually writes, and how the node ends up being the only piece of the system that the frontend ever talks to.
+[Effectstream payment-app](https://github.com/effectstream/payment-app) is a small but complete example of an Effectstream application: a fiat-or-crypto in-game item store backed by an on-chain contract and an off-chain indexer.  This post walks through the specific implementation: what the contract does (and pointedly doesn't do), what shape the grammar takes, what the state machine actually writes, and how the node ends up being the only piece of the system that the frontend ever talks to.
 
 ## The five moving pieces
 
 Concretely, the running system is:
 
-1. **`PaymentEffectstreamL2`**, a Solidity contract at [packages/contracts-evm/src/contracts/PaymentEffectstreamL2.sol](packages/contracts-evm/src/contracts/PaymentEffectstreamL2.sol). It extends `EffectstreamL2Contract` and adds *zero* custom logic. There are no item prices on-chain, no allow-lists, no per-item checks. It's the base contract, deployed.
-2. **The batcher** at [packages/batcher/batcher.dev.ts](packages/batcher/batcher.dev.ts), using `@effectstream/batcher`. It collects signed inputs from wallet-connected users and submits them on a tight cadence (~1000ms).
-3. **The effectstream node** in [packages/node/](packages/node/) — the focus of this post.
-4. **Postgres**, with a single table defined in [packages/database/migrations/000-init.sql](packages/database/migrations/000-init.sql): `user_items(wallet, item_id, amount)`. That's the whole schema.
+1. **`PaymentEffectstreamL2`**, a Solidity contract at [packages/contracts-evm/src/contracts/PaymentEffectstreamL2.sol](https://github.com/effectstream/payment-app/tree/main/packages/contracts-evm/src/contracts/PaymentEffectstreamL2.sol). It extends `EffectstreamL2Contract` and adds *zero* custom logic. There are no item prices on-chain, no allow-lists, no per-item checks. It's the base contract, deployed.
+2. **The batcher** at [packages/batcher/batcher.dev.ts](https://github.com/effectstream/payment-app/tree/main/packages/batcher/batcher.dev.ts), using `@effectstream/batcher`. It collects signed inputs from wallet-connected users and submits them on a tight cadence (~1000ms).
+3. **The effectstream node** in [packages/node/](https://github.com/effectstream/payment-app/tree/main/packages/node/) — the focus of this post.
+4. **Postgres**, with a single table defined in [packages/database/migrations/000-init.sql](https://github.com/effectstream/payment-app/tree/main/packages/database/migrations/000-init.sql): `user_items(wallet, item_id, amount)`. That's the whole schema.
 5. **A React frontend** that talks to the node's REST API, never to the chain or Postgres directly.
 
 Three environments share this code:
 
 | Env | EVM | Database | Entry point |
 | --- | --- | --- | --- |
-| `dev` | Hardhat | PGLite (in-process) | [packages/node/main.dev.ts](packages/node/main.dev.ts) |
-| `staging` | Ethereum Sepolia | Local Postgres | [packages/node/main.staging.ts](packages/node/main.staging.ts) |
-| `mainnet` | Arbitrum Sepolia | Managed Postgres | [packages/node/main.mainnet.ts](packages/node/main.mainnet.ts) |
+| `dev` | Hardhat | PGLite (in-process) | [packages/node/main.dev.ts](https://github.com/effectstream/payment-app/tree/main/packages/node/main.dev.ts) |
+| `staging` | Ethereum Sepolia | Local Postgres | [packages/node/main.staging.ts](https://github.com/effectstream/payment-app/tree/main/packages/node/main.staging.ts) |
+| `mainnet` | Arbitrum Sepolia | Managed Postgres | [packages/node/main.mainnet.ts](https://github.com/effectstream/payment-app/tree/main/packages/node/main.mainnet.ts) |
 
 A top-level orchestrator (`start.dev.ts`, `start.staging.ts`, `start.mainnet.ts`) boots the right combination of services for each env. Locally that means PGLite + Hardhat + node + batcher + frontend in one process; in production only the node and the batcher need to run.
 
@@ -37,7 +37,7 @@ If you cloned the repo right now and opened `packages/node/`, you'd find a surpr
 
 ### `grammar.ts` — the app's vocabulary
 
-[packages/node/grammar.ts](packages/node/grammar.ts) defines the entire set of valid inputs this app understands. There is exactly one:
+[packages/node/grammar.ts](https://github.com/effectstream/payment-app/tree/main/packages/node/grammar.ts) defines the entire set of valid inputs this app understands. There is exactly one:
 
 ```
 purchaseItem(itemId: 1..18, amount: 1..1000)
@@ -47,7 +47,7 @@ That's it. The TypeBox schema bounds `itemId` to the 18 items currently in the s
 
 ### `state-machine.ts` — the entire business logic
 
-[packages/node/state-machine.ts](packages/node/state-machine.ts) is the only place where game rules live, and the rules are about as simple as they get:
+[packages/node/state-machine.ts](https://github.com/effectstream/payment-app/tree/main/packages/node/state-machine.ts) is the only place where game rules live, and the rules are about as simple as they get:
 
 ```ts
 stm.addStateTransition("purchaseItem", function* (data) {
@@ -63,7 +63,7 @@ This is also where adding a new action would happen. Want refunds? Add a `refund
 
 ### `api.ts` — the only thing the frontend talks to
 
-[packages/node/api.ts](packages/node/api.ts) is a Fastify server with three endpoints:
+[packages/node/api.ts](https://github.com/effectstream/payment-app/tree/main/packages/node/api.ts) is a Fastify server with three endpoints:
 
 - `GET /api/items?wallet=0x…` — returns the user's inventory as a flat array of `{wallet, item_id, amount}` rows. The frontend polls this to update the *Owned: N* badges.
 - `GET /api/health` — a liveness check used by the orchestrator and any deploy probes.
