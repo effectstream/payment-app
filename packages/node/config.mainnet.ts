@@ -3,6 +3,10 @@ import {
   ConfigNetworkType,
   ConfigSyncProtocolType,
 } from "@effectstream/config";
+// TODO: the real mainnet chain has not been finalized. Using Arbitrum Sepolia as
+// a placeholder to match the frontend (chain id 421614) and README. Transak imposes
+// no constraint here — it supports any EVM chain — so this must track wherever the
+// contract is deployed, and TRANSAK_NETWORK must be set to the matching network.
 import { arbitrumSepolia } from "viem/chains";
 import { PrimitiveTypeEVMEffectstreamL2 } from "@effectstream/sm/builtin";
 import { getConnection } from "@effectstream/db";

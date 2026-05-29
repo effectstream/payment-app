@@ -2,7 +2,9 @@ import type { OrchestratorConfig } from "@effectstream/orchestrator/config";
 
 /**
  * Mainnet orchestrator — runs only the sync node and batcher.
- * Chain (Arbitrum Sepolia) and database (managed Postgres) live elsewhere.
+ * Chain and database (managed Postgres) live elsewhere. NOTE: the real mainnet
+ * chain has not been finalized; the node and batcher currently run against Arbitrum
+ * Sepolia as a placeholder (see TODOs in config.mainnet.ts / batcher.mainnet.ts).
  *
  * Required env vars (validated inside the processes):
  *   EVM_RPC_URL, EFFECTSTREAM_L2_ADDRESS,

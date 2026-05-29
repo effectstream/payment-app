@@ -1,6 +1,6 @@
 # Inside payment-app: How This Effectstream App Is Wired
 
-[Effectstream payment-app](https://github.com/effectstream/payment-app) is a small but complete example of an Effectstream application: a fiat-or-crypto in-game item store backed by an on-chain contract and an off-chain indexer.  This post walks through the specific implementation: what the contract does (and pointedly doesn't do), what shape the grammar takes, what the state machine actually writes, and how the node ends up being the only piece of the system that the frontend ever talks to.
+[Effectstream payment-app](https://github.com/effectstream/payment-app) is a small but complete example of an Effectstream application: a fiat-or-crypto in-game item store backed by an on-chain contract and an off-chain indexer. This post is for anyone using the repo as a template — or just curious how the pieces fit. The short version: almost all your work lives in three small files inside the node. The rest of this post explains why.
 
 ## The five moving pieces
 
@@ -9,7 +9,7 @@ Concretely, the running system is:
 1. **`PaymentEffectstreamL2`**, a Solidity contract at [packages/contracts-evm/src/contracts/PaymentEffectstreamL2.sol](https://github.com/effectstream/payment-app/tree/main/packages/contracts-evm/src/contracts/PaymentEffectstreamL2.sol). It extends `EffectstreamL2Contract` and adds *zero* custom logic. There are no item prices on-chain, no allow-lists, no per-item checks. It's the base contract, deployed.
 2. **The batcher** at [packages/batcher/batcher.dev.ts](https://github.com/effectstream/payment-app/tree/main/packages/batcher/batcher.dev.ts), using `@effectstream/batcher`. It collects signed inputs from wallet-connected users and submits them on a tight cadence (~1000ms).
 3. **The effectstream node** in [packages/node/](https://github.com/effectstream/payment-app/tree/main/packages/node/) — the focus of this post.
-4. **Postgres**, with a single table defined in [packages/database/migrations/000-init.sql](https://github.com/effectstream/payment-app/tree/main/packages/database/migrations/000-init.sql): `user_items(wallet, item_id, amount)`. That's the whole schema.
+4. **Postgres**, with a single table defined in [packages/database/migrations/000-init.sql](https://github.com/effectstream/payment-app/tree/main/packages/database/migrations/000-init.sql): `user_items(wallet, item_id, amount)` — the entire schema.
 5. **A React frontend** that talks to the node's REST API, never to the chain or Postgres directly.
 
 Three environments share this code:
@@ -18,7 +18,9 @@ Three environments share this code:
 | --- | --- | --- | --- |
 | `dev` | Hardhat | PGLite (in-process) | [packages/node/main.dev.ts](https://github.com/effectstream/payment-app/tree/main/packages/node/main.dev.ts) |
 | `staging` | Ethereum Sepolia | Local Postgres | [packages/node/main.staging.ts](https://github.com/effectstream/payment-app/tree/main/packages/node/main.staging.ts) |
-| `mainnet` | Arbitrum Sepolia | Managed Postgres | [packages/node/main.mainnet.ts](https://github.com/effectstream/payment-app/tree/main/packages/node/main.mainnet.ts) |
+| `mainnet`* | Arbitrum Sepolia | Managed Postgres | [packages/node/main.mainnet.ts](https://github.com/effectstream/payment-app/tree/main/packages/node/main.mainnet.ts) |
+
+\* The real `mainnet` chain hasn't been finalized yet. The table lists Arbitrum Sepolia because that's the placeholder the code and frontend currently use (chain id `421614`); the actual target chain is still an open decision. Transak doesn't constrain it — it supports any EVM chain — so whatever you deploy the contract to, you just point `TRANSAK_NETWORK` at the matching network.
 
 A top-level orchestrator (`start.dev.ts`, `start.staging.ts`, `start.mainnet.ts`) boots the right combination of services for each env. Locally that means PGLite + Hardhat + node + batcher + frontend in one process; in production only the node and the batcher need to run.
 
@@ -43,7 +45,7 @@ If you cloned the repo right now and opened `packages/node/`, you'd find a surpr
 purchaseItem(itemId: 1..18, amount: 1..1000)
 ```
 
-That's it. The TypeBox schema bounds `itemId` to the 18 items currently in the store and caps `amount` at 1000 per call. The grammar gets reused in three places: the contract uses it to validate calldata, the frontend uses it to construct inputs, and the node uses it to parse events back into typed values. One schema, three consumers, no drift.
+The TypeBox schema bounds `itemId` to the 18 items currently in the store and caps `amount` at 1000 per call. The grammar gets reused in three places: the contract uses it to validate calldata, the frontend uses it to construct inputs, and the node uses it to parse events back into typed values. One schema, three consumers, no drift.
 
 ### `state-machine.ts` — the entire business logic
 
