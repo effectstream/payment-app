@@ -1,8 +1,24 @@
 # payment-app
 
-Effectstream template for buying in-game items with fiat — single-chain EVM (Hardhat for dev, Arbitrum Sepolia for mainnet) with a Transak fiat→crypto purchase flow on mainnet.
+An Effectstream template for buying in-game items with fiat. The app logic is **chain-agnostic** — Effectstream reads on-chain events from any supported chain and folds them into one deterministic state machine, so the same template can target Cardano, Midnight, Bitcoin, Avail, Celestia, NEAR, or an EVM chain. This build ships a deployment that connects Transak fiat→crypto purchase flow.
 
 This is a migration of the [Paima payments game template](https://github.com/PaimaStudios/paima-game-templates/pull/87) onto the [Effectstream template specification](https://github.com/effectstream/effectstream/blob/v-next-bun-start/templates/effectstream-template-guidelines.md).
+
+---
+
+## Multi-chain by design
+
+This template is **not chain-locked.** It's built on [Effectstream](https://effectstream.github.io/docs/), a multi-chain engine, and the app's own logic carries zero chain-specific code.
+
+**How Effectstream makes that work.** An Effectstream app reads on-chain events ("inputs") from one or more chains and folds them into a single deterministic state machine. You write three small files — a *grammar* (the inputs your app accepts), a *state machine* (what each input does to your database), and an *API* — and none of them know or care which chain an input arrived on. The engine handles the chain-specific parts behind a uniform interface:
+
+- **Sync (read).** A per-chain sync protocol indexes events and normalizes them into typed inputs. Effectstream ships built-in grammars for each chain — `cardanoTransfer` / `cardanoMintBurn` / `utxorpcGeneric` for Cardano, `midnightGeneric` for Midnight, `bitcoinAddress` for Bitcoin, `availGeneric` and `celestiaGeneric` for the data-availability chains, the `nearNep*` family for NEAR, and `evmErc20` / `evmErc721` for EVM.
+- **Batching (write).** A per-chain adapter packs user-signed inputs into batched on-chain submissions — a browser-side submit path for Cardano, `MidnightAdapter` for Midnight, `BitcoinAdapter`, `NearAdapter`, and `EffectstreamL2DefaultAdapter` for EVM.
+- **Config.** A `ConfigBuilder` declares the networks, sync protocols, and primitives an app listens to. Switching the target chain is a config + contract-package change, not an app-logic change.
+
+**What that means for this template.** The `purchaseItem` grammar, the upsert state transition, the `user_items` table, and `/api/items` are all chain-neutral. The chain-specific surface is deliberately narrow: the contract package, the chain entry in the config, the batcher adapter, and the fiat rail. To retarget this template at **Cardano** (or Midnight, Bitcoin, NEAR…), you swap the contract package for the matching `contracts-{chain}` package, point the config at that chain's network + grammar, and choose the corresponding batcher adapter — the three node files stay untouched. See the multi-chain examples in the [Effectstream repo](https://github.com/effectstream/effectstream/tree/v-next/templates) (e.g. the `preorder` template, a Cardano + EVM dApp).
+
+> The concrete run instructions below use an EVM chain (Hardhat / Sepolia / Arbitrum Sepolia) and Transak, because that's the path this build wires up end-to-end today. Transak settles fiat onto EVM chains; a Cardano or other-chain build pairs the same app logic with a chain-appropriate payment rail.
 
 ---
 
@@ -11,7 +27,7 @@ This is a migration of the [Paima payments game template](https://github.com/Pai
 | Tool | Version | Required for |
 |------|---------|--------------|
 | [Bun](https://bun.sh) | ≥ 1.1 | Everything (runtime + package manager) |
-| [Foundry](https://book.getfoundry.sh/getting-started/installation) | latest | `forge build` (EVM artifacts) |
+| [Foundry](https://book.getfoundry.sh/getting-started/installation) | latest | `forge build` (Solidity artifacts) |
 | Node.js | ≥ 20 | Some Hardhat postinstall scripts |
 | Docker | (optional) | Containerized runs |
 | Browser wallet (MetaMask, Rabby…) | — | Dev mode purchases |
@@ -393,7 +409,7 @@ payment-app/
 | Sync API | 9999 | `/api/items`, `/api/health` |
 | Orchestrator | 4747 | Process management + `/shutdown` |
 | Batcher | 3334 | `/send-input` (frontend posts here when `preferBatchedMode=true`) |
-| Hardhat EVM | 8545 | Dev only |
+| Hardhat node | 8545 | Dev only (local chain) |
 | PGLite | 5432 | Dev only |
 
 ---
